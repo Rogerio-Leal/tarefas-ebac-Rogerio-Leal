@@ -1,0 +1,26 @@
+Algoritmo em portugol - Hora de acordar
+
+1 - Desligar o despertador do celular.
+2 - Levantar da cama.
+3 - Colocar o roupão.
+4 - Ir ao banheiro.
+5 - Lavar o rosto.
+6 - Abrir o armário do banheiro.
+7 - Pegar a escova de dentes e o tubo de pasta de dentes.
+8 - Escovar os dentes.
+9 - Ir até a cozinha.
+10 - Abrir o armário da cozinha.
+11 - Pegar o pote de café.
+12 - Colocar água e o pó de café na cafeteira.
+13 - Ligar a cafeteira.
+14 - Ir até o quarto da minha filha.
+15 - Acordar a minha filha.
+16 - Voltar para a cozinha.
+17 - Arrumar a mesa para o café da manhã.
+18 - Voltar para o meu quarto.
+19 - Trocar de roupa.
+20 - Ir até a cozinha.
+21 - Pegar a chave do carro.
+22 - Sair pela porta da cozinha.
+23 - Abrir a porta do carro.
+24 - Sair com o carro.
