@@ -1,0 +1,9 @@
+Injeção de dependência (DI) com o framework Spring
+
+Primeiramente, o que é uma DI? É um padrão de projeto que ao invés de uma classe criar seus próprios componentes dependentes,
+ela os recebe de forma externa, o mais recomendado é através de construtores, mas também pode ser feito através de um método Setter ou
+por propriedade, com a dependência sendo inserida direto na variável.
+
+Utilizando o framework Spring, facilita muito o uso deste método, pois ele é quem comanda e injeta essas dependências automaticamente
+através do conceito Inversion of Control (IoC). Ele cria e gerencia objetos, chamados de beans, onde só é necessário sinalizar onde quer
+que eles sejam injetados. Isso deixa o código mais limpo e fácil de gerenciar.
