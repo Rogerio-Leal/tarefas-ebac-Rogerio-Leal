@@ -1,0 +1,5 @@
+package br.com.rleal.domain;
+
+public class Cliente {
+
+}
