@@ -1,0 +1,11 @@
+package tarefa_mod32;
+
+public class ProdutoDAO implements IProdutoDAO {
+
+	@Override
+	public Produto cadastrar(Produto produto) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

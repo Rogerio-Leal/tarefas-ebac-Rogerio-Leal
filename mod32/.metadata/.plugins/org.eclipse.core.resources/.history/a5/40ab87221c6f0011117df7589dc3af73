@@ -1,0 +1,9 @@
+package tarefa_mod32.dao;
+
+import tarefa_mod32.Produto;
+
+public interface IProdutoDAO {
+	
+	public Produto cadastrar (Produto produto);
+
+}

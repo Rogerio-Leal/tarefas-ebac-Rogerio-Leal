@@ -1,0 +1,11 @@
+package tarefa_mod32;
+
+public class Produto {
+	
+	private Long id;
+	
+	private String codigo;
+	
+	private String nome;
+
+}

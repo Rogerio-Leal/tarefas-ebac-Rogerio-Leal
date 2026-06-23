@@ -1,0 +1,13 @@
+package tarefa_mod32;
+
+import javax.persistence.Entity;
+
+@Entity
+public class Produto {
+	
+	@Id
+	private Long id;
+	
+	private String codigo;
+
+}

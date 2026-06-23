@@ -1,0 +1,24 @@
+package br.com.rleal;
+
+import org.junit.Test;
+
+import br.com.rleal.dao.IProdutoDAO;
+import br.com.rleal.dao.ProdutoDAO;
+import br.com.rleal.domain.Produto;
+
+public class ProdutoTest {
+	
+	private IProdutoDAO produtoDao;
+	
+	public ProdutoTest() {
+		produtoDao = new ProdutoDAO();
+	}
+	
+	@Test
+	public void cadastrar() {
+		Produto produto = new Produto();
+		produto.setCodigo("01");
+		produto.setNome("Televisão");
+		produto = produtoDao.cadastrar(produto);
+	}
+}

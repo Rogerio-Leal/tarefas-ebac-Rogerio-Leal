@@ -1,0 +1,23 @@
+package tarefa_mod32;
+
+import org.junit.Test;
+
+import tarefa_mod32.dao.IProdutoDAO;
+import tarefa_mod32.dao.ProdutoDAO;
+
+public class ProdutoTest {
+	
+	private IProdutoDAO produtoDao;
+	
+	public ProdutoTest() {
+		produtoDao = new ProdutoDAO();
+	}
+	
+	@Test
+	public void cadastrar() {
+		Produto produto = new Produto();
+		produto.setCodigo("01");
+		produto.setNome("Televisão");
+		produtoDao.cadastrar(produto);
+	}
+}

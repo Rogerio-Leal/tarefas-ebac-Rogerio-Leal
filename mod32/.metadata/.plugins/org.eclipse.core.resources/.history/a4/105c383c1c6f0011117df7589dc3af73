@@ -1,0 +1,9 @@
+package tarefa_mod32.dao;
+
+import br.com.rleal.domain.Produto;
+
+public interface IProdutoDAO {
+	
+	public Produto cadastrar (Produto produto);
+
+}
