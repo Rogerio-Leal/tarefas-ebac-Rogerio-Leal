@@ -1,0 +1,45 @@
+package br.com.rleal;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.junit.Test;
+
+import br.com.rleal.domain.Acessorio;
+import br.com.rleal.domain.Carro;
+import br.com.rleal.domain.Marca;
+
+public class CarroTest {
+
+	@Test
+	public void cadastrar() {
+		
+		Marca marca = new Marca();
+	    marca.setNome("Volkswagen");
+
+	    // 2. Instanciar e persistir os Acessórios
+	    Acessorio tetoSolar = new Acessorio();
+	    tetoSolar.setNome("Teto Solar");
+	    // acessorioDao.cadastrar(tetoSolar);
+
+	    Acessorio arCondicionado = new Acessorio();
+	    arCondicionado.setNome("Ar Condicionado");
+	    // acessorioDao.cadastrar(arCondicionado);
+
+	    // 3. Instanciar o Carro e preencher os atributos básicos
+	    Carro carro = new Carro();
+	    carro.setCodigo("GOLF01");
+	    carro.setNome("Golf GTI");
+	    carro.setPreco(new BigDecimal("150000.00"));
+
+	    // 4. Definir o relacionamento ManyToOne
+	    carro.setMarca(marca);
+
+	    // 5. Definir o relacionamento ManyToMany (Lista de Acessórios)
+	    List<Acessorio> listaAcessorios = new ArrayList<>();
+	    listaAcessorios.add(tetoSolar);
+	    listaAcessorios.add(arCondicionado);
+	    carro.setAcessorios(listaAcessorios);
+	}
+}

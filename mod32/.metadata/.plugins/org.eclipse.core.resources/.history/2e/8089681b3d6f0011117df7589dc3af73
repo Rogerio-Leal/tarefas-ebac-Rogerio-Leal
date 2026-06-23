@@ -1,0 +1,31 @@
+package br.com.rleal.domain;
+
+import java.math.BigDecimal;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "TB_CARRO")
+public class Carro {
+	
+	@Id
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="carro_seq")
+	@SequenceGenerator(name="carro_seq", sequenceName="sq_carro", initialValue = 1, allocationSize = 1)
+	private Long id;
+	
+	@Column(name = "CODIGO", length = 10, nullable = false, unique = true)
+	private String codigo;
+	
+	@Column(name = "NOME", length = 50, nullable = false)
+	private String nome;
+	
+	@Column(name = "PRECO", precision = 10, scale = 2, nullable = false)
+	private BigDecimal preco;
+
+}
