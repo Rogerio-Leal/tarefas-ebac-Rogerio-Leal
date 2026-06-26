@@ -1,0 +1,5 @@
+package br.com.rleal.domain.dao.generic;
+
+public interface IGenericJapDAO {
+
+}

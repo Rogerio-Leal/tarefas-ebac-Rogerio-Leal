@@ -1,0 +1,9 @@
+package br.com.rleal.domain.dao;
+
+public class Persistente {
+	
+	public Long getId();
+	
+	public void setId(Long id);
+
+}

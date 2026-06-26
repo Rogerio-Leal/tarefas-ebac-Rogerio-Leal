@@ -1,0 +1,12 @@
+# Arquivos compilados
+*.class
+target/
+bin/
+
+# Configurações do Eclipse/Spring Tools
+.settings/
+.project
+.classpath
+
+# Outros
+.DS_Store
