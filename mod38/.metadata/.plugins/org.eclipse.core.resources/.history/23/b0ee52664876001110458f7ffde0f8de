@@ -1,0 +1,46 @@
+package br.com.rleal.service;
+
+import java.util.List;
+import javax.ejb.Stateless;
+import javax.inject.Inject;
+
+import br.com.rleal.dao.AlunoDAO;
+import br.com.rleal.domain.Aluno;
+
+@Stateless
+public class AlunoService {
+
+    @Inject
+    private AlunoDAO alunoDAO;
+
+    public void salvar(Aluno aluno) throws Exception {
+        // Regra 1: Valida campos vazios
+        if (aluno.getNome() == null || aluno.getNome().trim().isEmpty()) {
+            throw new Exception("O nome do aluno é obrigatório.");
+        }
+        if (aluno.getCpf() == null || aluno.getCpf().trim().isEmpty()) {
+            throw new Exception("O CPF do aluno é obrigatório.");
+        }
+
+        // Regra 2: Verifica se já existe (Proteção contra duplicidade)
+        Aluno alunoExistente = alunoDAO.buscarPorCpf(aluno.getCpf());
+        if (alunoExistente != null) {
+            throw new Exception("Já existe um aluno cadastrado com o CPF: " + aluno.getCpf());
+        }
+
+        // Se passou ileso por todas as regras acima, salva no banco!
+        alunoDAO.salvar(aluno);
+    }
+
+    public void atualizar(Aluno aluno) throws Exception {
+        alunoDAO.atualizar(aluno);
+    }
+
+    public void excluir(Aluno aluno) {
+        alunoDAO.excluir(aluno);
+    }
+
+    public List<Aluno> buscarTodos() {
+        return alunoDAO.buscarTodos();
+    }
+}

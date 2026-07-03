@@ -1,0 +1,113 @@
+package br.com.rleal.test;
+
+import static org.junit.Assert.*;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.persistence.PersistenceException;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import br.com.rleal.dao.AlunoDAO;
+import br.com.rleal.domain.Aluno;
+
+public class AlunoTesteIntegrado {
+
+    private EntityManagerFactory emf;
+    private EntityManager em;
+    private AlunoDAO alunoDAO;
+
+    @Before
+    public void setUp() {
+        emf = Persistence.createEntityManagerFactory("CadastroDeAlunosTestPU");
+        em = emf.createEntityManager();
+        
+        em.getTransaction().begin();
+        
+        alunoDAO = new AlunoDAO();
+        alunoDAO.setEntityManager(em);
+    }
+
+    @After
+    public void tearDown() {
+        if (em.getTransaction().isActive()) {
+            em.getTransaction().rollback();
+        }
+        
+        em.close();
+        emf.close();
+    }
+
+    @Test
+    public void deveSalvarAlunoComSucesso() {
+        Aluno aluno = new Aluno();
+        aluno.setNome("Rogério Narcizo");
+        aluno.setCpf("111.222.333-44");
+
+        alunoDAO.salvar(aluno);
+
+        assertNotNull("O ID deveria ter sido gerado após salvar", aluno.getId());
+    }
+
+    @Test
+    public void deveBuscarAlunoPorFiltro() {
+        Aluno aluno = new Aluno();
+        aluno.setNome("Ana Silva");
+        aluno.setCpf("999.888.777-66");
+        alunoDAO.salvar(aluno);
+        
+        var lista = alunoDAO.buscarPorFiltro("Ana");
+        
+        assertFalse("A lista não deveria estar vazia", lista.isEmpty());
+        assertEquals("Ana Silva", lista.get(0).getNome());
+    }
+    
+    @Test
+    public void deveEditarAluno() {
+        Aluno aluno = new Aluno();
+        aluno.setNome("Rogério");
+        aluno.setCpf("123.456.789-00");
+        alunoDAO.salvar(aluno);
+        
+        aluno.setNome("Rogério Leal");
+        alunoDAO.atualizar(aluno);
+        
+        em.flush();
+        em.clear();
+        
+        Aluno alunoEditado = em.find(Aluno.class, aluno.getId());
+        assertEquals("O nome deveria ter sido atualizado", "Rogério Leal", alunoEditado.getNome());
+    }
+    
+    @Test(expected = PersistenceException.class)
+    public void naoDeveSalvarDoisAlunosComMesmoCpf() {
+
+        Aluno aluno1 = new Aluno();
+        aluno1.setNome("Rogério 1");
+        aluno1.setCpf("111.111.111-11");
+
+        Aluno aluno2 = new Aluno();
+        aluno2.setNome("Rogério 2");
+        aluno2.setCpf("111.111.111-11");
+
+        alunoDAO.salvar(aluno1);
+        em.flush();
+
+        alunoDAO.salvar(aluno2);
+        em.flush();
+    }
+    
+    @Test
+    public void deveExcluirAluno() {
+        Aluno aluno = new Aluno();
+        aluno.setNome("Para Excluir");
+        aluno.setCpf("000.000.000-00");
+        alunoDAO.salvar(aluno);
+        
+        alunoDAO.excluir(aluno);
+        
+        Aluno buscado = em.find(Aluno.class, aluno.getId());
+        assertNull("O aluno deveria ter sido removido", buscado);
+    }
+}

@@ -1,0 +1,43 @@
+package br.com.rleal.dao;
+
+import java.util.List;
+
+import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+
+import br.com.rleal.domain.Aluno;
+import br.com.rleal.generic.GenericDAO;
+
+@Stateless
+public class AlunoDAO extends GenericDAO<Aluno> {
+
+    public AlunoDAO() {
+        super(Aluno.class);
+    }
+    
+    public Aluno buscarPorCpf(String cpf) {
+        try {
+            return em.createQuery("from Aluno where cpf = :cpf", Aluno.class)
+                     .setParameter("cpf", cpf)
+                     .getSingleResult();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+    
+    public List<Aluno> buscarPorFiltro(String filtro) {
+        String jpql = "FROM Aluno a WHERE LOWER(a.nome) LIKE LOWER(:filtro) OR a.cpf LIKE :filtro";
+        return em.createQuery(jpql, Aluno.class)
+                 .setParameter("filtro", "%" + filtro + "%")
+                 .getResultList();
+    }
+    
+    public void atualizar(Aluno aluno) {
+        em.merge(aluno);
+    }
+
+	public void setEntityManager(EntityManager em) {
+		this.em = em;
+		
+	}
+}

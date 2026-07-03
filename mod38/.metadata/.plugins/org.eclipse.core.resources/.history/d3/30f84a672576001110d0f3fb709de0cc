@@ -1,0 +1,5 @@
+package br.com.rleal.controller;
+
+public class AlunoBean {
+
+}

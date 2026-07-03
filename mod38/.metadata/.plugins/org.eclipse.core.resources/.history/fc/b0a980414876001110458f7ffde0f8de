@@ -1,0 +1,14 @@
+package br.com.rleal.dao;
+
+import javax.ejb.Stateless;
+
+import br.com.rleal.domain.Aluno;
+import br.com.rleal.generic.GenericDAO;
+
+@Stateless
+public class AlunoDAO extends GenericDAO<Aluno> {
+
+    public AlunoDAO() {
+        super(Aluno.class);
+    }
+}

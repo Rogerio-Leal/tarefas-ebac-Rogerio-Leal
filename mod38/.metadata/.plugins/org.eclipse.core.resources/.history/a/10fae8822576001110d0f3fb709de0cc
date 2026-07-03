@@ -1,0 +1,49 @@
+package br.com.rleal.controller;
+
+import java.io.Serializable;
+
+import javax.faces.view.ViewScoped;
+import javax.inject.Named;
+
+@Named
+@ViewScoped
+public class AlunoBean implements Serializable {
+
+    
+
+    @EJB
+    private AlunoDAO alunoDAO;
+
+    private Aluno aluno = new Aluno();
+    private List<Aluno> listaAlunos;
+
+    @PostConstruct
+    public void init() {
+        carregarLista();
+    }
+
+    public void carregarLista() {
+        listaAlunos = alunoDAO.listar();
+    }
+
+    public void salvar() {
+        alunoDAO.salvar(aluno);
+        aluno = new Aluno(); // Limpa o formulário
+        carregarLista();     // Atualiza a tabela
+    }
+
+    public void excluir(Aluno alunoSelecionado) {
+        alunoDAO.excluir(alunoSelecionado);
+        carregarLista();
+    }
+
+    public void editar(Aluno alunoSelecionado) {
+        this.aluno = alunoSelecionado;
+    }
+
+    // Getters e Setters
+    public Aluno getAluno() { return aluno; }
+    public void setAluno(Aluno aluno) { this.aluno = aluno; }
+    public List<Aluno> getListaAlunos() { return listaAlunos; }
+    public void setListaAlunos(List<Aluno> listaAlunos) { this.listaAlunos = listaAlunos; }
+}

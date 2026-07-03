@@ -1,0 +1,39 @@
+package br.com.rleal.dao;
+
+import java.util.List;
+
+import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
+import br.com.rleal.domain.Aluno;
+
+@Stateless
+public class AlunoDAO {
+
+    // Esta anotação "injeta" o seu persistence.xml automaticamente
+    @PersistenceContext(unitName = "CadastroAlunosPU")
+    private EntityManager em;
+
+    public void salvar(Aluno aluno) {
+        if (aluno.getId() == null) {
+            em.persist(aluno); // Salva novo
+        } else {
+            em.merge(aluno);   // Atualiza existente
+        }
+    }
+
+    public void excluir(Aluno aluno) {
+        // Precisamos "sincronizar" o objeto com o banco antes de remover
+        Aluno alunoParaRemover = em.find(Aluno.class, aluno.getId());
+        em.remove(alunoParaRemover);
+    }
+
+    public List<Aluno> listar() {
+        return em.createQuery("SELECT a FROM Aluno a", Aluno.class).getResultList();
+    }
+    
+    public Aluno buscarPorId(Long id) {
+        return em.find(Aluno.class, id);
+    }
+}

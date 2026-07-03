@@ -1,0 +1,54 @@
+package br.com.rleal.controller;
+
+import java.io.Serializable;
+import java.util.List;
+
+import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
+import javax.faces.view.ViewScoped;
+import javax.inject.Named;
+
+import br.com.rleal.dao.AlunoDAO;
+import br.com.rleal.domain.Aluno;
+
+@Named
+@ViewScoped
+public class AlunoBean implements Serializable {
+
+	private static final long serialVersionUID = -481644183050451027L;
+
+	@EJB
+    private AlunoDAO alunoDAO;
+
+    private Aluno aluno = new Aluno();
+    private List<Aluno> listaAlunos;
+
+    @PostConstruct
+    public void init() {
+        carregarLista();
+    }
+
+    public void carregarLista() {
+    	listaAlunos = alunoDAO.buscarTodos();
+    }
+
+    public void salvar() {
+        alunoDAO.salvar(aluno);
+        aluno = new Aluno();
+        carregarLista();
+    }
+
+    public void excluir(Aluno alunoSelecionado) {
+        alunoDAO.excluir(alunoSelecionado);
+        carregarLista();
+    }
+
+    public void editar(Aluno alunoSelecionado) {
+        this.aluno = alunoSelecionado;
+    }
+
+    public Aluno getAluno() { return aluno; }
+    public void setAluno(Aluno aluno) { this.aluno = aluno; }
+    public List<Aluno> getListaAlunos() { return listaAlunos; }
+    public void setListaAlunos(List<Aluno> listaAlunos) { this.listaAlunos = listaAlunos; }
+}
