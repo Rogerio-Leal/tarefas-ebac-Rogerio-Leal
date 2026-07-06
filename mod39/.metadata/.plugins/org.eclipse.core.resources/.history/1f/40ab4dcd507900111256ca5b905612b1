@@ -1,0 +1,91 @@
+package br.com.rleal.controller;
+
+import java.io.Serializable;
+import java.util.List;
+import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
+import br.com.rleal.domain.Tarefa;
+import br.com.rleal.service.TarefaService;
+import br.com.rleal.exceptions.ToDoListException;
+
+@Named
+@ViewScoped
+public class TarefaBean implements Serializable {
+
+
+
+    @Inject
+    private TarefaService tarefaService;
+
+    private Tarefa tarefa;
+    private List<Tarefa> listaTarefas;
+
+    @PostConstruct
+    public void init() {
+        novaTarefa();
+        carregarLista();
+    }
+
+    public void novaTarefa() {
+        this.tarefa = new Tarefa();
+    }
+
+    public void carregarLista() {
+        this.listaTarefas = tarefaService.listarTodas();
+    }
+
+    public void salvar() {
+        try {
+            tarefaService.salvar(tarefa);
+            adicionarMensagem(FacesMessage.SEVERITY_INFO, "Sucesso", "Tarefa salva com sucesso!");
+            novaTarefa(); 
+            carregarLista();
+        } catch (ToDoListException e) {
+
+            adicionarMensagem(FacesMessage.SEVERITY_ERROR, "Atenção", e.getMessage());
+        }
+    }
+
+    public void concluir(Tarefa t) {
+        try {
+            tarefaService.concluir(t);
+            carregarLista();
+        } catch (ToDoListException e) {
+            adicionarMensagem(FacesMessage.SEVERITY_ERROR, "Erro", e.getMessage());
+        }
+    }
+
+    public void excluir(Tarefa t) {
+        try {
+            tarefaService.excluir(t);
+            adicionarMensagem(FacesMessage.SEVERITY_INFO, "Sucesso", "Tarefa removida!");
+            carregarLista();
+        } catch (ToDoListException e) {
+            adicionarMensagem(FacesMessage.SEVERITY_ERROR, "Erro", e.getMessage());
+        }
+    }
+
+    private void adicionarMensagem(FacesMessage.Severity severidade, String titulo, String detalhe) {
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(severidade, titulo, detalhe));
+    }
+    
+    public Tarefa getTarefa() {
+        return tarefa;
+    }
+
+    public void setTarefa(Tarefa tarefa) {
+        this.tarefa = tarefa;
+    }
+
+    public List<Tarefa> getListaTarefas() {
+        return listaTarefas;
+    }
+
+    public void setListaTarefas(List<Tarefa> listaTarefas) {
+        this.listaTarefas = listaTarefas;
+    }
+}

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>Minha ToDo List</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            background-color: #f4f4f9; 
+            margin: 0; 
+            padding: 20px; 
+        }
+        .container { 
+            max-width: 900px; 
+            margin: 0 auto; 
+            background: white; 
+            padding: 20px; 
+            border-radius: 8px; 
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
+        }
+        .linha-riscada { 
+            text-decoration: line-through; 
+            color: #999; 
+        }
+    </style>
+</h:head>
+
+<h:body>
+    <div class="container">
+        <h:form id="formTodo">
+            
+            <p:messages id="mensagens" showDetail="true" closable="true">
+                <p:autoUpdate/>
+            </p:messages>
+
+            <p:panel header="Nova Tarefa" style="margin-bottom: 20px;">
+                <h:panelGrid columns="3" cellpadding="5">
+                    <p:outputLabel for="descricao" value="O que precisa ser feito?" />
+                    
+                    <p:inputText id="descricao" value="#{tarefaBean.tarefa.descricao}" 
+                                 size="50" placeholder="Ex: Estudar Java Back End..." 
+                                 required="true" requiredMessage="A descrição é obrigatória."/>
+                    
+                    <p:commandButton value="Adicionar" action="#{tarefaBean.salvar}" 
+                                     icon="pi pi-plus" update=":formTodo" 
+                                     styleClass="ui-button-success" />
+                </h:panelGrid>
+            </p:panel>
+
+            <p:panel header="Minhas Tarefas">
+                <p:dataTable id="tabelaTarefas" value="#{tarefaBean.listaTarefas}" var="t"
+                             emptyMessage="Você não tem tarefas pendentes. Aproveite o dia!"
+                             paginator="true" rows="10" paginatorPosition="bottom">
+                    
+                    <p:column headerText="ID" width="50" style="text-align: center;">
+                        <h:outputText value="#{t.id}" />
+                    </p:column>
+                    
+                    <p:column headerText="Descrição">
+                        <h:outputText value="#{t.descricao}" 
+                                      styleClass="#{t.concluida ? 'linha-riscada' : ''}" />
+                    </p:column>
+                    
+                    <p:column headerText="Data" width="100" style="text-align: center;">
+                        <h:outputText value="#{t.dataCriacao}">
+                            <f:convertDateTime type="localDate" pattern="dd/MM/yyyy" />
+                        </h:outputText>
+                    </p:column>
+                    
+                    <p:column headerText="Ações" width="200" style="text-align: center;">
+                        
+                        <p:commandButton icon="pi pi-check" title="Concluir" 
+                                         action="#{tarefaBean.concluir(t)}" 
+                                         update=":formTodo"
+                                         process="@this"
+                                         rendered="#{!t.concluida}" 
+                                         styleClass="ui-button-success ui-button-outlined" 
+                                         style="margin-right: 5px;"/>
+                                         
+                        <p:commandButton icon="pi pi-trash" title="Excluir" 
+                                         action="#{tarefaBean.excluir(t)}" 
+                                         update=":formTodo"
+                                         process="@this"
+                                         styleClass="ui-button-danger ui-button-outlined" />
+                                         
+                    </p:column>
+                </p:dataTable>
+            </p:panel>
+            
+        </h:form>
+    </div>
+</h:body>
+</html>

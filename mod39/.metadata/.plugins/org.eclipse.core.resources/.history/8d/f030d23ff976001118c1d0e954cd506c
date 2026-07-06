@@ -1,0 +1,84 @@
+package br.com.rleal.test;
+
+import static org.junit.Assert.*;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import br.com.rleal.dao.AlunoDAO;
+import br.com.rleal.domain.Aluno;
+
+public class AlunoTesteIntegrado {
+
+    private EntityManagerFactory emf;
+    private EntityManager em;
+    private AlunoDAO alunoDAO;
+
+    @Before
+    public void setUp() {
+    	System.out.println("DEBUG: O arquivo de configuração existe? " + 
+    		    (Thread.currentThread().getContextClassLoader().getResource("META-INF/persistence.xml") != null));
+        emf = Persistence.createEntityManagerFactory("CadastroDeAlunosTestPU");
+        em = emf.createEntityManager();
+        
+        em.getTransaction().begin();
+        
+        alunoDAO = new AlunoDAO();
+        alunoDAO.setEntityManager(em);
+    }
+
+    @After
+    public void tearDown() {
+        if (em.getTransaction().isActive()) {
+            em.getTransaction().rollback();
+        }
+        
+        em.close();
+        emf.close();
+    }
+
+    @Test
+    public void deveSalvarAlunoComSucesso() {
+        Aluno aluno = new Aluno();
+        aluno.setNome("Rogério Narcizo");
+        aluno.setCpf("111.222.333-44");
+
+        alunoDAO.salvar(aluno);
+
+        assertNotNull("O ID deveria ter sido gerado após salvar", aluno.getId());
+    }
+
+    @Test
+    public void deveBuscarAlunoPorFiltro() {
+        // Arrange
+        Aluno aluno = new Aluno();
+        aluno.setNome("Ana Silva");
+        aluno.setCpf("999.888.777-66");
+        alunoDAO.salvar(aluno);
+        
+        // Act
+        var lista = alunoDAO.buscarPorFiltro("Ana");
+        
+        // Assert
+        assertFalse("A lista não deveria estar vazia", lista.isEmpty());
+        assertEquals("Ana Silva", lista.get(0).getNome());
+    }
+    
+    @Test
+    public void deveExcluirAluno() {
+        // Arrange
+        Aluno aluno = new Aluno();
+        aluno.setNome("Para Excluir");
+        aluno.setCpf("000.000.000-00");
+        alunoDAO.salvar(aluno);
+        
+        // Act
+        alunoDAO.excluir(aluno);
+        
+        // Assert
+        Aluno buscado = em.find(Aluno.class, aluno.getId());
+        assertNull("O aluno deveria ter sido removido", buscado);
+    }
+}

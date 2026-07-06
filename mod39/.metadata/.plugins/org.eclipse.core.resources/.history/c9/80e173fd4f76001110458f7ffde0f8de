@@ -1,0 +1,84 @@
+package br.com.rleal.controller;
+
+import java.io.Serializable;
+import java.util.List;
+
+import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import br.com.rleal.domain.Aluno;
+import br.com.rleal.service.AlunoService;
+
+@Named
+@ViewScoped
+public class AlunoBean implements Serializable {
+
+	private static final long serialVersionUID = -481644183050451027L;
+
+	@Inject
+    private AlunoService alunoService;
+
+    private Aluno aluno = new Aluno();
+    private List<Aluno> listaAlunos;
+
+    @PostConstruct
+    public void init() {
+        carregarLista();
+    }
+
+    public void carregarLista() {
+    	listaAlunos = alunoService.buscarTodos();
+    }
+
+    public void salvar() {
+        try {
+            if (aluno.getId() == null) {
+                alunoService.salvar(aluno); // O ID é vazio, manda inserir
+            } else {
+                alunoService.atualizar(aluno); // O ID já existe, manda atualizar
+            }
+            
+            FacesContext.getCurrentInstance().addMessage(null, 
+                new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso", "Aluno salvo com sucesso!"));
+            
+            aluno = new Aluno();
+            
+            listaAlunos = alunoService.buscarTodos();
+            
+        } catch (Exception e) {
+
+            FacesContext.getCurrentInstance().addMessage(null, 
+                new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro, cadastro já existe!", e.getMessage()));
+        }
+    }
+
+    public void excluir(Aluno alunoSelecionado) {
+        try {
+            alunoService.excluir(alunoSelecionado);
+            listaAlunos = alunoService.buscarTodos(); 
+            
+            FacesContext.getCurrentInstance().addMessage(null, 
+                new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso", "Aluno excluído com sucesso!"));
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage(null, 
+                new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro ao excluir", e.getMessage()));
+        }
+    }
+
+    public void editar(Aluno alunoSelecionado) {
+        this.aluno = alunoSelecionado;
+    }
+    
+    public void prepararEdicao(Aluno alunoSelecionado) {
+        this.aluno = alunoSelecionado; 
+    }
+
+    public Aluno getAluno() { return aluno; }
+    public void setAluno(Aluno aluno) { this.aluno = aluno; }
+    public List<Aluno> getListaAlunos() { return listaAlunos; }
+    public void setListaAlunos(List<Aluno> listaAlunos) { this.listaAlunos = listaAlunos; }
+}

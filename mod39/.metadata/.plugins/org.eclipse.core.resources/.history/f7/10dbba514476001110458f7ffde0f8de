@@ -1,0 +1,5 @@
+package br.com.rleal.generic;
+
+public class GenericDAO {
+
+}

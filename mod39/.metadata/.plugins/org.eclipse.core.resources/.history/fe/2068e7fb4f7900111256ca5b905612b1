@@ -1,0 +1,68 @@
+package br.com.rleal.dao;
+
+import java.io.Serializable;
+import java.util.List;
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import br.com.rleal.domain.Tarefa;
+import br.com.rleal.exceptions.ToDoListException;
+
+public class TarefaDAO implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+	@Inject
+    private EntityManager em;
+
+    public void salvar(Tarefa tarefa) {
+        try {
+            em.getTransaction().begin();
+            em.persist(tarefa);
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            throw new ToDoListException("Erro ao salvar a tarefa: " + e.getMessage());
+        }
+    }
+
+    public void atualizar(Tarefa tarefa) {
+        try {
+            em.getTransaction().begin();
+            em.merge(tarefa);
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            throw new ToDoListException("Erro ao atualizar a tarefa: " + e.getMessage());
+        }
+    }
+
+    public void excluir(Tarefa tarefa) {
+        try {
+            em.getTransaction().begin();
+            // Garante que o objeto está gerido pelo EntityManager atual antes de remover
+            Tarefa tarefaGerida = em.find(Tarefa.class, tarefa.getId());
+            if (tarefaGerida != null) {
+                em.remove(tarefaGerida);
+            }
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            throw new ToDoListException("Erro ao excluir a tarefa: " + e.getMessage());
+        }
+    }
+
+    public List<Tarefa> buscarTodas() {
+        try {
+            // Operações de leitura (SELECT) não necessitam obrigatoriamente de abrir transação
+            return em.createQuery("SELECT t FROM Tarefa t ORDER BY t.dataCriacao DESC", Tarefa.class)
+                     .getResultList();
+        } catch (Exception e) {
+            throw new ToDoListException("Erro ao listar as tarefas: " + e.getMessage());
+        }
+    }
+}

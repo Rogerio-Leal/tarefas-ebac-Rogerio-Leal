@@ -1,0 +1,66 @@
+package br.com.rleal.controller;
+
+import java.io.Serializable;
+import java.util.List;
+
+import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import br.com.rleal.domain.Aluno;
+import br.com.rleal.service.AlunoService;
+
+@Named
+@ViewScoped
+public class AlunoBean implements Serializable {
+
+	private static final long serialVersionUID = -481644183050451027L;
+
+	@Inject
+    private AlunoService alunoService;
+
+    private Aluno aluno = new Aluno();
+    private List<Aluno> listaAlunos;
+
+    @PostConstruct
+    public void init() {
+        carregarLista();
+    }
+
+    public void carregarLista() {
+    	listaAlunos = alunoService.buscarTodos();
+    }
+
+    public void salvar() {
+        try {
+            alunoService.salvar(aluno);
+            
+            FacesContext.getCurrentInstance().addMessage(null, 
+                new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso", "Aluno salvo com sucesso!"));
+            
+            aluno = new Aluno(); 
+            
+        } catch (Exception e) {
+
+            FacesContext.getCurrentInstance().addMessage(null, 
+                new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro ao tentar salvar o cadastro, por favor tente novamente", e.getMessage()));
+        }
+    }
+
+    public void excluir(Aluno alunoSelecionado) {
+    	alunoService.excluir(alunoSelecionado);
+        carregarLista();
+    }
+
+    public void editar(Aluno alunoSelecionado) {
+        this.aluno = alunoSelecionado;
+    }
+
+    public Aluno getAluno() { return aluno; }
+    public void setAluno(Aluno aluno) { this.aluno = aluno; }
+    public List<Aluno> getListaAlunos() { return listaAlunos; }
+    public void setListaAlunos(List<Aluno> listaAlunos) { this.listaAlunos = listaAlunos; }
+}

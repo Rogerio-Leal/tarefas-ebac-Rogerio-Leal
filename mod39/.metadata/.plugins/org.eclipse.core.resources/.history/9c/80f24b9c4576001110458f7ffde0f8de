@@ -1,0 +1,39 @@
+package br.com.rleal.service;
+
+import java.util.List;
+import javax.ejb.Stateless;
+import javax.inject.Inject;
+
+import br.com.rleal.dao.AlunoDAO;
+import br.com.rleal.domain.Aluno;
+
+@Stateless
+public class AlunoService {
+
+    @Inject
+    private AlunoDAO alunoDAO;
+
+    public void salvar(Aluno aluno) throws Exception {
+        // Exemplo de regra de negócio:
+        if (aluno.getNome() == null || aluno.getNome().trim().isEmpty()) {
+            throw new Exception("O nome do aluno não pode estar vazio!");
+        }
+        
+        // Se passar por todas as regras, manda o DAO salvar
+        alunoDAO.salvar(aluno);
+    }
+
+    public void atualizar(Aluno aluno) throws Exception {
+        // Lógica de validação para edição pode vir aqui
+        alunoDAO.atualizar(aluno);
+    }
+
+    public void excluir(Aluno aluno) {
+        // Lógica para verificar se o aluno pode ser excluído
+        alunoDAO.excluir(aluno);
+    }
+
+    public List<Aluno> buscarTodos() {
+        return alunoDAO.buscarTodos(); // ou listar(), dependendo de como você nomeou
+    }
+}

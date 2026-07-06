@@ -1,0 +1,18 @@
+package br.com.rleal.dao;
+
+import java.util.List;
+
+import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
+import br.com.rleal.domain.Aluno;
+import br.com.rleal.generic.GenericDAO;
+
+@Stateless
+public class AlunoDAO extends GenericDAO<Aluno> {
+
+    public AlunoDAO() {
+        super(Aluno.class);
+    }
+}

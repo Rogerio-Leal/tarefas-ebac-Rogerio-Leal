@@ -1,0 +1,5 @@
+package br.com.rleal.utils;
+
+public class EntityManagerProducer {
+
+}

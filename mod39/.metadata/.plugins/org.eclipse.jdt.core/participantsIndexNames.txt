@@ -1,0 +1,7 @@
+INDEX VERSION 1.134
+C:\Users\roger\Documents\workspace-spring-tools-for-eclipse-5.2.0.RELEASE\.metadata\.plugins\org.eclipse.jst.jsp.core\jspsearch\789204912.index
+\ToDoList\target\generated-sources\annotations
+C:\Users\roger\Documents\workspace-spring-tools-for-eclipse-5.2.0.RELEASE\.metadata\.plugins\org.eclipse.jst.jsp.core\jspsearch\3569074052.index
+\CadastroDeAlunos\src\main\java
+C:\Users\roger\Documents\workspace-spring-tools-for-eclipse-5.2.0.RELEASE\.metadata\.plugins\org.eclipse.jst.jsp.core\jspsearch\3221780262.index
+\CadastroDeAlunos\src\main\java

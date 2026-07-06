@@ -1,0 +1,42 @@
+package br.com.rleal.service;
+
+import java.io.Serializable;
+import java.util.List;
+import javax.inject.Inject;
+import br.com.rleal.dao.TarefaDAO;
+import br.com.rleal.domain.Tarefa;
+import br.com.rleal.exceptions.ToDoListException;
+
+public class TarefaService implements Serializable {
+
+	private static final long serialVersionUID = -428442469024441370L;
+	
+	@Inject
+    private TarefaDAO tarefaDAO;
+
+    public void salvar(Tarefa tarefa) {
+
+        if (tarefa.getDescricao() == null || tarefa.getDescricao().trim().isEmpty()) {
+            throw new ToDoListException("A descrição da tarefa não pode estar vazia.");
+        }
+        
+        if (tarefa.getId() == null) {
+            tarefaDAO.salvar(tarefa);
+        } else {
+            tarefaDAO.atualizar(tarefa);
+        }
+    }
+
+    public void concluir(Tarefa tarefa) {
+        tarefa.setConcluida(true);
+        tarefaDAO.atualizar(tarefa);
+    }
+
+    public void excluir(Tarefa tarefa) {
+        tarefaDAO.excluir(tarefa);
+    }
+
+    public List<Tarefa> listarTodas() {
+        return tarefaDAO.buscarTodas();
+    }
+}

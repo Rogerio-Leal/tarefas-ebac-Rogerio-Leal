@@ -1,0 +1,5 @@
+package br.com.rleal.service;
+
+public class AlunoService {
+
+}
